@@ -16,6 +16,11 @@ Hardware: RTL-SDR dongle (R820T/R828D tuner assumed) on a Pixel 10 Pro via USB-C
 - compileSdk/targetSdk 36, minSdk 29. Deps (`gradle/libs.versions.toml`): activity-ktx, kotlinx-coroutines-android, osmdroid 6.1.20, junit.
 - Install on the phone with **wireless debugging**, since the dongle occupies the USB-C port.
 
+## Releases
+- GitHub: https://github.com/n9lvc5/dmr-heat-map (public). Releases attach `dmr-heat-map-v<version>.apk` from `gradlew assembleRelease`.
+- Release key: `release.jks` + `keystore.properties` in the project root, **gitignored, must be backed up**; losing it means users can't update in place. Bump `versionCode`/`versionName` in `app/build.gradle.kts` per release.
+- Debug and release builds have different signatures, so switching between them on a phone needs an uninstall (deletes the app's private sessions; the Download/DMR Heat Map copies stay).
+
 ## Architecture
 The app does **not** drive USB itself. It launches the "RTL-SDR driver" app (`marto.rtl_tcp_andro`, Play Store) with the
 intent `iqsrc://-a 127.0.0.1 -p 14423 -n 1`. That app owns the dongle and serves **rtl_tcp** on localhost; we read 8-bit IQ over TCP.

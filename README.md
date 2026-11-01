@@ -4,9 +4,11 @@ Android app: RTL-SDR + phone GPS → live coverage map of a DMR repeater's outpu
 
 ## Phone setup (once)
 1. Install **RTL-SDR driver** (Martin Marinov) from the Play Store. It owns the USB dongle; this app talks to it.
-2. Install this app: copy `app/build/outputs/apk/debug/app-debug.apk` to the phone and open it,
-   or use wireless debugging: `adb pair` / `adb connect`, then `adb install -r app/build/outputs/apk/debug/app-debug.apk`.
-3. Plug in the RTL-SDR through a USB-C OTG adapter.
+2. Install this app: download the APK from the
+   [latest release](https://github.com/n9lvc5/dmr-heat-map/releases/latest) on the phone and open it
+   (allow "Install unknown apps" for your browser when asked). Android 10 or newer.
+3. Plug in the RTL-SDR through a USB-C OTG adapter. If another SDR app (e.g. SDR Touch) opens automatically,
+   close it: only one app can use the dongle at a time.
 
 ## Survey
 1. Enter the repeater **output** frequency in MHz, pick a gain (start around 29.7 dB) and press **Start**.
@@ -29,3 +31,7 @@ Values are relative (dBFS / SNR), not calibrated dBm.
 
 ## Build
 `gradlew test assembleDebug` (uses Android Studio's JDK: set `JAVA_HOME` to `C:\Program Files\Android\Android Studio\jbr`).
+Install with `adb install -r app/build/outputs/apk/debug/app-debug.apk` (wireless debugging, since the dongle uses the USB port).
+
+`gradlew assembleRelease` signs with the release key when `keystore.properties` + `release.jks` exist (not in git);
+otherwise it produces an unsigned APK.
