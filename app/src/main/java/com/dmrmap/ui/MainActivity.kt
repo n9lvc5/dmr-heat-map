@@ -52,6 +52,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var center: Button
     /** Following was turned off by dragging the map (not by the button). */
     private var draggedAway = false
+    /** Survey state the map view was last set up for (null until first shown). */
+    private var shownRunning: Boolean? = null
     private lateinit var readout: TextView
 
     private val prefs by lazy { getSharedPreferences("settings", MODE_PRIVATE) }
@@ -151,13 +153,18 @@ class MainActivity : ComponentActivity() {
                         listOf(R.id.export, R.id.clear).forEach {
                             findViewById<Button>(it).visibility = if (running) View.GONE else View.VISIBLE
                         }
-                        if (running) {
-                            map.controller.setZoom(15.0)
-                            myLocation.enableFollowLocation()
-                        } else {
-                            myLocation.disableFollowLocation()
+                        // Only on an actual Start/Stop, not when returning to the app (e.g. after a
+                        // phone call), so the user's zoom and centring choice are kept.
+                        if (running != shownRunning) {
+                            if (running) {
+                                map.controller.setZoom(15.0)
+                                myLocation.enableFollowLocation()
+                            } else {
+                                myLocation.disableFollowLocation()
+                            }
+                            draggedAway = false
+                            shownRunning = running
                         }
-                        draggedAway = false
                         updateCenterButton()
                     }
                 }

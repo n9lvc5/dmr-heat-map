@@ -18,7 +18,9 @@
         </intent>
     </queries>
 
+    <!-- No cloud backup: session CSVs are GPS tracks and should stay on the phone. -->
     <application
+        android:allowBackup="false"
         android:label="DMR Heat Map"
         android:icon="@android:drawable/ic_menu_mapmode"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">

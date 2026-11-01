@@ -47,6 +47,9 @@ CSV columns: `time_ms,lat,lon,accuracy_m,peak_dbfs,noise_dbfs,snr_db,active`.
 - Manual fixed gain with AGC off, so readings are comparable across a survey. Values are relative (dBFS/SNR), **not calibrated dBm**.
 - "Inactive" points are logged but not drawn, because they're ambiguous (no coverage vs. nobody transmitting).
 - The map (`SurveyState.grid`) is rebuilt from every session CSV at the current frequency (on launch and on Start), so Start/Stop/Start and app restarts don't lose points. "Clear map" (`SessionStore.clear`, only while stopped) runs `exportPublic` first, then deletes that frequency's private CSVs; the public per-session copies remain.
+- `allowBackup="false"`: session CSVs are GPS tracks, so no Google cloud backup (phone-to-phone transfer on Android 12+ still allowed).
+- Survey keeps running with the screen locked/in a pocket and during calls (FGS + partial wake lock). Verified 2026-11-01 on the Pixel: 1 point/s with no gaps while screen off in deep Doze; the RTL-SDR driver also runs as a foreground service. Returning to the app only re-applies zoom/follow on an actual Start/Stop (`shownRunning`).
+- `gradle-wrapper.properties` pins `distributionSha256Sum`; update it whenever the Gradle version changes.
 - After a reinstall (not an update), MediaStore no longer lets the app see its old files in Downloads, so re-exporting creates "name (1).csv" copies.
 
 ## Possible next steps (not started)
